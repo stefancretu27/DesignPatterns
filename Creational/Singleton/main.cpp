@@ -1,9 +1,7 @@
 
 #include "Singleton.hpp"
 #include "SingletonTester.hpp"
-
-#include <iostream>
-using namespace std;
+#include "SingletonDataAccess.hpp"
 
 template<class T>
 struct check_type
@@ -68,6 +66,9 @@ T* factoryPtr()
     return inst;
 }
 
+map<unsigned, string>  SingletonDataAccess::mData;
+const string SingletonDataAccess::mFilename{"C:\\Users\\scretu\\VisualCodeProjects\\DesignPatterns\\Creational\\Singleton\\data.txt"};
+
 int main()
 {
     SingletonRef* singletonref = factoryRef<SingletonRef>();
@@ -79,6 +80,12 @@ int main()
     cout<<"is SingletonRef class a singleton: "<<SingletonTester::is_singleton<SingletonRef>(factoryRef<SingletonRef>)<<endl;
     cout<<"is SingletonUPtr class a singleton: "<<SingletonTester::is_singleton<SingletonUPtr>(factoryUPtr<SingletonUPtr>)<<endl;
     cout<<"is NonSingleton class a singleton: "<<SingletonTester::is_singleton<NonSingleton>(factoryPtr<NonSingleton>)<<endl;
+
+    SingletonDataAccess::getInstance().parseFile();
+    SingletonDataAccess::getInstance().printData();
+
+    DummyDataAccess::getInstance().parseFile();
+    DummyDataAccess::getInstance().printData();
 
     return 0;
 }
