@@ -31,10 +31,10 @@ struct ContainsIntegers
     virtual int getSum() = 0;
     
     //2nd solution
-    virtual vector<int>::iterator begin() = 0;
-    virtual vector<int>::iterator end() = 0;
+    virtual ContainsIntegers* begin() = 0;
+    virtual ContainsIntegers* end() = 0;
 
-    //not necessarily useful
+    virtual string getType() const = 0;
     virtual size_t getSize() = 0;
 };
 
@@ -46,18 +46,16 @@ struct SingleValue: public ContainsIntegers
     explicit SingleValue(int* const value):mValue{*value}{};
     
     int convertValue(SingleValue* const inst){return inst->mValue;};
+
+    string getType() const override {return "SingleValue";};
     
     //1st solution
     int getSum() override{return mValue;};
     
     //2nd solution
     size_t getSize() override {return 1;};
-    vector<int>::iterator begin() override {return static_cast<vector<int>::iterator>(&mValue);};
-    vector<int>::iterator end() override 
-    {
-        auto it = static_cast<vector<int>::iterator>(&mValue); 
-        return ++it;
-    };
+    ContainsIntegers* begin() override {return this;};
+    ContainsIntegers* end() override {return this+1;};
 };
 
 struct ManyValues: public ContainsIntegers
@@ -73,6 +71,8 @@ struct ManyValues: public ContainsIntegers
     {
         mValues.emplace_back(value);
     }
+
+    string getType() const override {return "ManyValues";};
     
     int getSum()  override
     {
@@ -84,8 +84,46 @@ struct ManyValues: public ContainsIntegers
     };
     size_t getSize() override {return mValues.size();};
     
-    vector<int>::iterator begin() override {return mValues.begin();};
-    vector<int>::iterator end() override {return mValues.end();};
+    ContainsIntegers* begin() override {return this;};
+    ContainsIntegers* end() override {return this+mValues.size();};
+};
+
+struct ManyValues2: public ContainsIntegers
+{ 
+    vector<ContainsIntegers*> mValues;
+    
+    ~ManyValues2()
+    {
+        for(ContainsIntegers* elem : mValues)
+            delete elem;
+    }
+    
+    void add(const int value)
+    {
+        ContainsIntegers* elem = new SingleValue(value);
+        mValues.push_back(elem);
+    }
+    
+    void add(const ManyValues& mv)
+    {
+        ContainsIntegers* ci = new ManyValues{mv.mValues};
+        mValues.push_back(ci);
+    }
+    
+    string getType() const override {return "ManyValues2";};
+
+    int getSum() override
+    {
+        int sum{0};
+        for(ContainsIntegers* elem : mValues)
+            sum += elem->getSum();
+        
+        return sum;
+    };
+    size_t getSize() override {return mValues.size();};
+
+    ContainsIntegers* begin() override {return this;};
+    ContainsIntegers* end() override {return this+mValues.size();};
 };
 
 int sum(const vector<ContainsIntegers*> items)
@@ -107,10 +145,38 @@ int sum2(const vector<ContainsIntegers*> items)
     //items can contain pointer to either SingleValue or ManyValues
     for(ContainsIntegers* item : items)
     {
-        //*item is an instance of ManyValues. As it overloaded begin() and end(), it can be looped over
-        for(int elem : *item)
+        if(item->getSize() == 1)
         {
-            result += elem;
+            result += static_cast<SingleValue*>(item)->mValue;
+        }
+        else
+        {
+            ManyValues* it = static_cast<ManyValues*>(item->begin());
+
+            for(int& elem : it->mValues)
+            {
+                result += elem;
+            }
+        }
+    }
+    
+    return result;
+}
+
+int sum3(const vector<ContainsIntegers*>& items )
+{
+    int result{};
+    //items can contain pointer to either SingleValue or ManyValues
+    for(ContainsIntegers* item : items)
+    {
+        //*item is an instance of ManyValues. As it overloaded begin() and end(), it can be looped over
+        if(item->getType() == "ManyValues2")
+        {
+            result += sum3(static_cast<ManyValues2*>(item)->mValues);
+        }
+        else
+        {
+            result += item->getSum();
         }
     }
     
