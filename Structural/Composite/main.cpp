@@ -33,6 +33,17 @@ int main()
     cout<<sum({&single_value, &other_values})<<" "<<sum2({&single_value, &other_values})<<endl;
     
     cout<<sum({&other_values, &other_values})<<" "<<sum2({&other_values, &other_values})<<endl;
+    
+    ManyValues2 other_values2{};
+    SingleValue single_value3{11};
+    other_values2.add(22);
+    other_values2.add(23);
+    other_values2.add(single_value3.mValue);
+    other_values2.add(other_values);
+
+    cout<<sum3({&other_values2, &other_values2})<<" "<<sum({&other_values2, &other_values2})<<endl;
+    cout<<sum3({&other_values, &other_values2})<<" "<<sum({&other_values, &other_values2})<<endl;
+    cout<<sum3({&other_values, &single_value2, &other_values2})<<" "<<sum({&other_values, &single_value2, &other_values2})<<endl;
 
     return 0;
 }
