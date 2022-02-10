@@ -1,39 +1,22 @@
 
+
 #include "Singleton.hpp"
 #include "SingletonTester.hpp"
 #include "SingletonDataAccess.hpp"
+#include "CheckTypes.hpp"
 
-template<class T>
-struct check_type
-{
-    static constexpr bool is_ref(){return false;};
-    static constexpr bool is_ptr(){return false;};
-    static constexpr bool is_uptr(){return false;};
-};
-
-template<class T>
-struct check_type<T&>
-{
-    static  constexpr bool is_ref(){return true;};
-    static constexpr  bool is_ptr(){return false;};
-    static  constexpr bool is_uptr(){return false;};
-};
-
-template<class T>
-struct check_type<T*>
-{
-    static constexpr bool is_ref(){return false;};
-    static constexpr bool is_ptr(){return true;};
-    static constexpr bool is_uptr(){return false;};
-};
-
-template<class T>
-struct check_type<const unique_ptr<T>&>
-{
-    static  constexpr bool is_ref(){return false;};
-    static constexpr  bool is_ptr(){return false;};
-    static  constexpr bool is_uptr(){return true;};
-};
+/*
+* Singleton is a class that is instantiated only once in the process' lifetime.
+* This unique instance is returned via a public static method after it is created locally, in the same method,
+* as a static local variable => ensuring thread safety wih magic statics since c++11.
+* Copy semantics of the Singleton class must be deleted.
+* The instance can be returned as a reference to self or as a const reference to unique_ptr to self
+*
+* In order to solve the testability issues, the methods from the Singleton class that must be tested
+* can be included in an interface. From this interface, the Singleton class then derived. Also, a singleton dummy
+* class also derives, implementing the same behavior for its emthods, but on mocked data. Otherwise, it
+* would be tested the behavior on the actual data (eg: prod DB), which is undesirable.
+*/
 
 template<class T> 
 T* factoryRef()
@@ -53,11 +36,6 @@ T* factoryUPtr()
     return inst.get();
 }
 
-class NonSingleton
-{
-
-};
-
 template<class T> 
 T* factoryPtr()
 {
@@ -65,6 +43,11 @@ T* factoryPtr()
 
     return inst;
 }
+
+class NonSingleton
+{
+
+};
 
 map<unsigned, string>  SingletonDataAccess::mData;
 const string SingletonDataAccess::mFilename{"C:\\Users\\scretu\\VisualCodeProjects\\DesignPatterns\\Creational\\Singleton\\data.txt"};
@@ -89,3 +72,4 @@ int main()
 
     return 0;
 }
+
