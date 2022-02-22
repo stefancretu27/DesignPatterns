@@ -46,15 +46,12 @@ struct FloatingPointNumber: public Element
 * after lexing is iterated over, when an operator is encountered, the operation's type is set
 * to the corresponding type, defined by the encapsulated enumeration.
 *
-* An operand can be a FloatingPointNumber or another operation, as an expression can contain
-* more subexpressions, each having at least one operation.
-*
 * This class models the ides of operators, acting as model for operations they define, together
 * with the associated operands.
 */
 struct Operation: public Element
 {
-    shared_ptr<Element> lhs, rhs;
+    FloatingPointNumber lhs, rhs;
     
     enum OperationType
     {
@@ -65,7 +62,7 @@ struct Operation: public Element
         div
     } operationType;
     
-    Operation():lhs{nullptr}, rhs{nullptr}, operationType{none}{};
+    Operation():operationType{none}{};
     
     double eval() const override
     {
@@ -73,11 +70,26 @@ struct Operation: public Element
 
         if(operationType == add)
         {
-            result = lhs->eval() + rhs->eval();
+            result = lhs.eval() + rhs.eval();
         }
         if(operationType == sub)
         {
-            result = lhs->eval() - rhs->eval();
+            result = lhs.eval() - rhs.eval();
+        }
+        if(operationType == mul)
+        {
+            result = lhs.eval() * rhs.eval();
+        }
+        if(operationType == div)
+        {
+            if(abs(rhs.eval() - 0.0f) >= 0.000001f)
+            {
+                result = lhs.eval() / rhs.eval();
+            }
+            else
+            {
+                result = numeric_limits<double>::min();
+            }
         }
 
         return result;
@@ -89,7 +101,9 @@ class ExpressionProcessor
 {
     private:
     double getValueFromNumericToken(Token tk);
+    vector<Token> computeParenthesis(vector<Token>& tokens);
     vector<Token> computeMultiplicationsAndDivisions(const vector<Token>& tokens);
+    double computeAdditionsAndSubstractions(const vector<Token>& tokens);
 
     public:
     map<char, double> variables;                         

@@ -28,13 +28,15 @@ struct Token
         multiply, 
         divide, 
         variable, 
-        floatingPointValue
+        floatingPointValue,
+        lparen,
+        rparen
     } type;
     string tokenizedItem;
     
     //construct a token as an association of its string representation and its type
     explicit Token(const string& inputToken, Type type):tokenizedItem{inputToken},
-                                                    type{type}
+                                                        type{type}
     {};
     
     friend ostream& operator<<(ostream& os, const Token& tok)

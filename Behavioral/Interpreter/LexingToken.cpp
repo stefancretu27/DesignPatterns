@@ -36,7 +36,7 @@ void LexingProcessor::processNumbersAndVariables(const string& inputText, size_t
             //also advance with the outer for loop, so to get the next character
             ++idx;
         }
-        else if (inputText[idy] == '.' && !isFloatingPoint)
+        else if ((inputText[idy] == '.' || inputText[idy] == ',') && !isFloatingPoint)
         {
             ss << inputText[idy];
             //also advance with the outer for loop, so to get the next character
@@ -93,6 +93,16 @@ vector<Token> LexingProcessor::lexingInputText(const string& inputText)
             case '/':
             {
                 result.push_back(Token{"/", Token::divide});
+                break;
+            }
+            case '(':
+            {
+                result.push_back(Token{"(", Token::lparen});
+                break;
+            }
+            case ')':
+            {
+                result.push_back(Token{")", Token::rparen});
                 break;
             }
             case '0':
