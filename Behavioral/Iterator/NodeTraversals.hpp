@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <queue>
 using namespace std;
 
 template <class T>
@@ -180,9 +181,39 @@ struct Node
         auto height = treeHeight(startNode);
 
         //loop which tell the function how many levels it should go down in the tree
-        for(size_t idx{1}; idx < height; ++idx)
+        for(size_t idx{1}; idx <= height; ++idx)
         {
             currentLevelBFS(startNode, idx);
+        }
+    }
+
+    void BFSWithQueue(Node<T>* startNode, vector<Node<T>*>& result)
+    {
+        queue<Node<T>*> levelNodes;
+
+        if(result.empty())
+        {
+            result.push_back(startNode);
+            levelNodes.push(startNode);
+        }
+        
+        while(!levelNodes.empty())
+        {
+            //take the front node in queue, pop it then go down further in tree from it
+            Node<T>* currentNode = levelNodes.front();
+            levelNodes.pop();
+
+            if(currentNode->left)
+            {
+                levelNodes.push(currentNode->left);
+                result.push_back(currentNode->left);
+            }
+
+            if(currentNode->right)
+            {
+                levelNodes.push(currentNode->right);
+                result.push_back(currentNode->right);
+            }
         }
     }
 };

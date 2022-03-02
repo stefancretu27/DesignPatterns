@@ -64,6 +64,14 @@ int main()
     cout<<endl<<" BFS output "<<endl;
     BFS(&root);
 
+    cout<<endl<<" BFS with queue "<<endl;
+    vector<Node<string>*> result4;
+    root.BFSWithQueue(&root, result4);
+    for(Node<string>* n : result4)
+    {
+        cout<< n->value << " ";
+    }
+
 
 
     cout<<endl<<" IterableClass and IteratorClass"<<endl;
