@@ -3,6 +3,11 @@
 #include <memory>
 
 /*
+* Brief description: Singleton is used when it is required to instntiate a class only once in process lifetime.
+* Implementation-wise, it creates a static instance inside a static method, which is a thread safe approach, whilst
+* the c-tor is private.
+*
+* Description:
 * Singleton is a class that is instantiated only once in the process' lifetime.
 * This unique instance is returned via a public static method after is created locally, in the same method,
 * as a static local variable => thread safe wih magic statics since c++11.
