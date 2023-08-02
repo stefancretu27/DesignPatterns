@@ -57,13 +57,14 @@ class JsonFileStructure
         mJsonStructure.insert(item);
     }
     
-    //combine builder with singleton,such that the built class interface exposes the builder object. 
-    //In such cases, the builder class can be made private
-    Builder<JsonFileStructure>& GetUPtrBuilder() 
+    //combine builder with singleton like implementation, such that the built class interface exposes the builder object. 
+    //In such cases, the builder class can be made private. 
+    //Not static method, as it is generated an instance of builder per each built object instance, so to get access to *this.
+    Builder<JsonFileStructure>& GetBuilder() 
     {
-        static Builder<JsonFileStructure> builderUPtr(*this);
+        static Builder<JsonFileStructure> builder(*this);
         
-        return builderUPtr;
+        return builder;
     }
     
     //friend functions
