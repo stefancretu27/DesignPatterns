@@ -7,7 +7,8 @@
 * Unlinke singleton that creates a unique instance of a class in the entire's project's lifetime,
 * the multiton allowas for creation of multiple instances, each insatnce being uniquely identified using a key.
 * The keys and instances are bookkept in a map. The map can be statically created by the getInstance method or
-* can be a member of the class, which would allow for more customization.
+* can be a member of the class, which would allow for more customization, as it serves as base class, with CRTP, for
+* classes requiring controlled multiple instances
 */
 
 //Multiton class working with multiple types of keys, but using string as default
@@ -33,12 +34,16 @@ class Multiton
     Multiton() = default;
 };
 
-//customizable multiton, working with different built types and different key types.
+/*
+*    Customizable multiton, working with different built types and different key types.
+*    class Foo : public CustomizableMultiton<std::string, Foo> {};
+*    Foo* foo1 = Foo::GetInstance("foobar");
+*/
 template<class Key, class T>
 class CustomizableMultiton
 {
     public:
-    static CustomizableMultiton* GetInstance(const Key& key)
+    static T* GetInstance(const Key& key)
     {
         auto&& it = mInstances.find(key);
         if( it == mInstances.end())
