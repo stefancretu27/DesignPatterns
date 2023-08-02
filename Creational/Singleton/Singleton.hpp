@@ -9,13 +9,13 @@
 *
 * Description:
 * Singleton is a class that is instantiated only once in the process' lifetime.
-* This unique instance is returned via a public static method after is created locally, in the same method,
-* as a static local variable => thread safe wih magic statics since c++11.
-* Copy semantics should be deleted.
+* This unique instance is returned via a public static method after it is created locally, in the same method,
+* as a static local variable => thread safe with magic statics since c++11.
+* Copy semantics should be publicly deleted.
 *
 * In order to solve the testability issues, the methods from the Singleton class that must be tested
-* can be included in an interface. From this interface, the Singleton class then derived. Also, a singleton dummy
-* class also derives, implementing the same behavior for its emthods, but on mocked data. Otherwise, it
+* can be included in an interface. From this interface, the Singleton class then derives. Also, a singleton dummy
+* class derives from it, implementing the same behavior for its methods, but on mocked data. Otherwise, it
 * would be tested the behavior on the actual data (eg: prod DB), which is undesirable.
 */
 
