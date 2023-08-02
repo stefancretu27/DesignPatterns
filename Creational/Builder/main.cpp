@@ -1,6 +1,13 @@
 #include "CodeBuilder.hpp"
 
 /*
+* Brief description: 
+* Builder is used when the class instance requires construction in multiple steps, either because it 
+* encapsulates a data structure that is populated in phases, or because it is so complex such that requires
+* multiple parameters upon construction, also provided in phases. Implementation-wise, it entails developing 
+* a separate class, called builder, which encapsulates a member instance to the class meant to be built.
+*
+* Description:
 * The builder design pattern provides a mechanism that allows the creation of a class to take place in steps.
 *
 * The reason behind is that some classes are complex and require lots of input upon creation. Having a ctor
