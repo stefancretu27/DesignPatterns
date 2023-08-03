@@ -4,9 +4,10 @@
 * Create the PrivateBuilder class as a private class for the Built class. Then, make the AppendItem method private, in the Built class.
 * Thus, the PrivateBuilder's AddItem that wrapps a call to AppendItem will be the only way to construct the object in phases, enforcing hereby
 * the usage of the PrivateBuilder instance.
-* Therefater, create a non-static method which constructs a PrivateBuilder object for each built instance, statically, following a singleton-like pattern,
-* only that the PrivateBuilder is tied to the Built object, as it gets the *this pointer as argument upon creation. The pointer is uised for calling the
-* AppendItem, as the PrivateBuilder must know to which object the new itesm must be added, hence the need for coupling the 2 classes.
+* Therefater, as the PrivateBuilder is tied to the Built object, it gets the *this pointer as argument upon creation. The pointer is used for calling the
+* AppendItem, as the PrivateBuilder must know to which object the new itesm must be added, hence the need for coupling the 2 classes. each Built object
+* has a PrivateBuilder instance, that is constructed from this pointer when Built c-tor is called, which applied to each c-tor overload.
+* As teher is a direct dependency between each Built and PrivateBuilder insatnce, the singleton patter cannot be applied to PrivateBuilder.
 */
 
 class Built
@@ -17,19 +18,23 @@ class Built
     
     public:
     //c-tors
-    Built() = default;
+    Built() : privateBuilderInstance{this}
+    {};
+    
     ~Built() = default;
     
-    Built(const pair<string, string>& initValue)
+    Built(const pair<string, string>& initValue) : privateBuilderInstance{this}
     {
         mData.emplace(initValue);
     };
     
-    Built(const Built& input) : mData{input.mData}
+    Built(const Built& input) : mData{input.mData},
+                                privateBuilderInstance{this}
     {
     };
     
-    Built(Built&& input) : mData{move(input.mData)}
+    Built(Built&& input) : mData{move(input.mData)},
+                           privateBuilderInstance{this}
     {
     };
     
@@ -61,8 +66,6 @@ class Built
     
     PrivateBuilder& GetPrivateBuilderInstance()
     {
-        static PrivateBuilder privateBuilderInstance{this};
-        
         return privateBuilderInstance;
     }
     
@@ -70,6 +73,8 @@ class Built
     class PrivateBuilder
     {
         public:
+        PrivateBuilder() = default;
+        
         PrivateBuilder(Built* root):rootObject{root}
         {};
         
@@ -81,7 +86,7 @@ class Built
         }
         
         private:
-        Built* rootObject;
+        Built* rootObject{nullptr};
     };
     
     void AppendItem(const pair<string, string>& item)
@@ -90,4 +95,5 @@ class Built
     }
  
     map<string, string> mData;
+    PrivateBuilder privateBuilderInstance;
 };
