@@ -1,5 +1,6 @@
 #include "CodeBuilder.hpp"
 #include "JsonFileStructure.hpp"
+#include "PrivateBuilderClass.hpp"
 /*
 * Brief description: 
 * Builder is used when the class instance requires construction in multiple steps, either because it 
@@ -83,6 +84,17 @@ int main()
     {
         cout<<keyVal.first<<" "<<keyVal.second<<endl;
     }
+
+    cout<<"---use Builder class as private class to the Builder, with dependeces on each other, enforcing adding new item via the Builder instance---"<<endl;
+    
+    Built builtObject{};
+    builtObject.GetPrivateBuilderInstance().AddItem(make_pair("template builder", "with singleton and CRTP"));
+    builtObject.GetPrivateBuilderInstance().AddItem(make_pair("add item to template builder", "-271.3"));
+    builtObject.DisplayContents();
+    
+    Built anotherBuiltObject{make_pair("another", "built object")};
+    anotherBuiltObject.GetPrivateBuilderInstance().AddItem(make_pair(" newly built object", "new item"));
+    anotherBuiltObject.DisplayContents();
 
     return 0;
 }
