@@ -1,3 +1,5 @@
+#pragma once
+
 /*
 * Template builder pattenr implementation can eb reused to build multiple complex classes, as long as they provide a AppendItem method that returns void.
 * Also, this implementation can be used in multiple ways. Firstly, it uses the variadic template c-tor to take required arguments used to construct the 
