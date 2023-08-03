@@ -13,10 +13,10 @@ class JsonFileStructure
     //c-tors
     JsonFileStructure() = default;
     ~JsonFileStructure() = default;
-    JsonFileStructure(const std::map<std::string, std::string>& inputParsedJsonFile) : mJsonStructure{std::move(inputParsedJsonFile)}
+    JsonFileStructure(const map<string, string>& inputParsedJsonFile) : mJsonStructure{move(inputParsedJsonFile)}
     {};
     
-    JsonFileStructure(const std::pair<std::string, std::string>& initValue)
+    JsonFileStructure(const pair<string, string>& initValue)
     {
         mJsonStructure.emplace(initValue);
     };
@@ -24,10 +24,10 @@ class JsonFileStructure
     JsonFileStructure(const JsonFileStructure& inputJsonFileStructure) : mJsonStructure{inputJsonFileStructure.mJsonStructure}
     {};
     
-    JsonFileStructure(JsonFileStructure&& inputJsonFileStructure) : mJsonStructure{std::move(inputJsonFileStructure.mJsonStructure)}
+    JsonFileStructure(JsonFileStructure&& inputJsonFileStructure) : mJsonStructure{move(inputJsonFileStructure.mJsonStructure)}
     {};
     
-    //apply rule of 4 and a half
+    //apply rule of 4 and a half. Copy and swap idiom: swap content of this with a copy of rhs, which is destroyed/deallocated at the end of the method
     JsonFileStructure& operator=(JsonFileStructure inputJsonFileStructure)
     {
         if(this != &inputJsonFileStructure)
@@ -40,9 +40,23 @@ class JsonFileStructure
     
     //setter and getter
     map<string, string> GetJsonFileStructure() const {return mJsonStructure;};
-    void SetJsonFileStructure(const std::map<std::string, std::string>& inputParsedJsonFile)
+    void SetJsonFileStructure(const map<string, string>& inputParsedJsonFile)
     {
-        mJsonStructure =std:: move(inputParsedJsonFile);
+        mJsonStructure = move(inputParsedJsonFile);
+    }
+    
+    void SetTemplateBuilder(TemplateBuilder<JsonFileStructure>* templateBuilder)
+    {
+        mTemplateBuilder = templateBuilder; 
+    }
+    
+    TemplateBuilder<JsonFileStructure>& GetBuilder() 
+    {
+        if(!mTemplateBuilder)
+        {
+            mTemplateBuilder = new TemplateBuilder<JsonFileStructure>(*this);
+        }
+        return *mTemplateBuilder;
     }
     
     //other methods
@@ -54,20 +68,11 @@ class JsonFileStructure
         }
     }
     
-    void AppendItem(const std::pair<std::string, std::string>& item)
+    void AppendItem(const pair<string, string>& item)
     {
         mJsonStructure.insert(item);
     }
     
-    //combine builder with singleton like implementation, such that the built class interface exposes the builder object. 
-    //In such cases, the builder class can be made private. 
-    //Not static method, as it is generated an instance of builder per each built object instance, so to get access to *this.
-    Builder<JsonFileStructure>& GetBuilder() 
-    {
-        static Builder<JsonFileStructure> builder(*this);
-        
-        return builder;
-    }
     
     //friend functions
     //the half part of 4 and a half rule, not needed as map object already specialziez std::swap
@@ -80,5 +85,6 @@ class JsonFileStructure
     }
     
     private:
-    std::map<std::string, std::string> mJsonStructure;
+    map<string, string> mJsonStructure;
+    TemplateBuilder<JsonFileStructure>* mTemplateBuilder;
 };
