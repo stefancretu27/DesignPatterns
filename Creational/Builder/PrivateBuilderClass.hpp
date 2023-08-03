@@ -84,6 +84,12 @@ class Built
         {
             rootObject->AppendItem(std::forward<Args>(args)...);
         }
+
+        //or use the dependency to insert data directly into the member map, bypassing the call to AppendItem
+        void AddItem(const pair<string, string>& item)
+        {
+            rootObject->mData.insert(item);
+        }
         
         private:
         Built* rootObject{nullptr};
