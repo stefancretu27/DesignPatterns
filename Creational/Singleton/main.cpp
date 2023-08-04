@@ -4,6 +4,7 @@
 #include "SingletonTester.hpp"
 #include "SingletonDataAccess.hpp"
 #include "CheckTypes.hpp"
+#include "Multiton.hpp"
 
 /*
 * Singleton is a class that is instantiated only once in the process' lifetime.
@@ -69,6 +70,14 @@ int main()
 
     DummyDataAccess::getInstance().parseFile();
     DummyDataAccess::getInstance().printData();
+
+    cout<<"---multiton example with templated key type, using the map as a thread-safe statically created variable in GetMultitonInstance---"<<endl;
+    
+    Multiton<MultitonExample, int>::GetMultitonInstance(0, 1, 'c', 3.14159, string("1st multiton"));
+    Multiton<MultitonExample, int>::GetMultitonInstance(0).PrintMembers();
+    //the above instance and the below 2 instances do nat use the same ma, as the Multiton class is created separately for each key type
+    Multiton<MultitonExample, double>::GetMultitonInstance(2.7182, 22, 'q', -271.3, "2nd multiton");
+    Multiton<MultitonExample, double>::GetMultitonInstance(5.5, -4, 'z', 21.3, "3rd multiton");
 
     return 0;
 }
