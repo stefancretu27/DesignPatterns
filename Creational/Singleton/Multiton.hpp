@@ -35,45 +35,68 @@ class Multiton
 };
 
 /*
-*    Customizable multiton, working with different built types and different key types.
-*    class Foo : public CustomizableMultiton<std::string, Foo> {};
-*    Foo* foo1 = Foo::GetInstance("foobar");
+* The Multiton pattern is an extension of the singleton pattern, allowing a class
+* to have more instances, but in a controlled fashion, as each instance is connected to
+* a key, hence bookkept in a map. Consequently, for a specific key (word/value/identifier)
+* only one instance of the class is created. 
+* The Multiton can be implemented as a template class, acting as a stencil used to instantiate
+* other classes in the above-described controlled fashion. Internally, it associates the Key
+* with a (unique) pointer that is allocated when the instances is requested but doesan't exist.
+* For being compliant with multiple classes, the getInstance method is implemented as variadic
+* template which perfect forwards the variadic template arguments to the class' c-tor.
+*
+* Works with c++17.
 */
-template<class Key, class T>
-class CustomizableMultiton
+
+template<class T, class Key = std::string>
+class Multiton
 {
     public:
-    static T* GetInstance(const Key& key)
+    template<class ... Args>
+    static T& GetMultitonInstance(const Key& key, Args&& ... args)
     {
+        const std::size_t args_number = sizeof...(Args);
+        
         auto&& it = mInstances.find(key);
-        if( it == mInstances.end())
+        
+        if (it == mInstances.end())
         {
-            T* instance = new T{};
-            mInstances[key] = instance;
+            if constexpr (args_number > 0)
+            {
+                mInstances[key] = std::make_unique<T>(std::forward<Args>(args)...);
+                std::cout<<"Key "<<key<<" associated with instance created with parameters"<<std::endl;
+            }
+            else if constexpr (args_number == 0)
+            {
+                mInstances[key] = std::make_unique<T>();
+                std::cout<<"Key "<<key<<" associated with no params instance"<<std::endl;
+            }
         }
         
-        return mInstances[key];
+        std::cout<<"Map size: "<<mInstances.size()<<std::endl;
+        
+        return *mInstances[key];
     }
     
-    static void DeleteInstance(const Key& key)
+    static void DeleteSpecificInstance(const Key& key)
     {
         auto&& it = mInstances.find(key);
-        if( it != mInstances.end())
-        {
-            mInstances.erase(key);
-        }
         
+        if(it != mInstances.end())
+        {
+            mInstances.erase(it); //or mInstances.erase(key);
+        }
     }
     
-    static void DeleteAllInstances()
+    static void DeleteAllInstance()
     {
         mInstances.clear();
     }
-      
+    
     private:
-    CustomizableMultiton() = default;
-    static std::map<Key, T*> mInstances;
+    Multiton() = default;
+    static std::map<Key, std::unique_ptr<T>> mInstances;
 };
 
-template<class Key, class T>
-std::map<Key, T*> CustomizableMultiton<Key, T>::mInstances{};
+template<class T, class Key>
+std::map<Key, std::unique_ptr<T>> Multiton<T, Key>::mInstances;
