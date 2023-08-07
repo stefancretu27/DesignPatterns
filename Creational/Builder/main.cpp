@@ -44,51 +44,35 @@ int main()
 
     cout << ClassStruct::createBuilder("Foo")->add_field("mUPtrSomeClass", "unique_ptr<SomeClass>")<<endl;
 
-    //use builder as singleton instance via the built class
-    cout<<"---use builder as singleton instance via the built class---"<<endl;
-    JsonFileStructure jsonFileInstance{};
-    jsonFileInstance.GetUPtrBuilder().AddItem(make_pair("item_singleton", "value"));
-    jsonFileInstance.GetUPtrBuilder().AddItem(make_pair("item2_singleton2", to_string(27.91)));
+     //use builder as template class examples
+    cout<<"---1. use template  builder as instance built within a static method of the built class---"<<endl;
+    JsonFileStructure jsonFileInstance = JsonFileStructure::GetStaticBuilder().AddItem(make_pair("template builder", "add item"))
+                                                                               .AddItem(make_pair("same template builder", to_string(27.91))).GetBuiltObject();
     
     jsonFileInstance.DisplayContents();
     
     //use builder and built class with explicitly created instances
-    cout<<"---use builder and built class with explicitly created instances---"<<endl;
-    JsonFileStructure objToBuild{};
-    Builder<JsonFileStructure> builder{objToBuild};
-    builder.AddItem(make_pair("item", "value"));
-    builder.AddItem(make_pair("new_item", to_string(-3.14159)));
+    cout<<"---use template builder and built class with explicitly created instances---"<<endl;
+    JsonFileStructure objToBuild{make_pair("built object", "instantiated outside the template builder")};
+    TemplateBuilder<JsonFileStructure> builder{&objToBuild};
+    builder.AddItem(make_pair("item", "value")).AddItem(make_pair("new_item", to_string(-3.14159)));
     
     for(auto&& keyVal : objToBuild.GetJsonFileStructure())
     {
         cout<<keyVal.first<<" "<<keyVal.second<<endl;
     }
     
-    objToBuild = move(jsonFileInstance);
-    objToBuild.DisplayContents();
-    jsonFileInstance.DisplayContents();
-    
     //use built class as internally created by the builder
-    cout<<"---use built class as internally created by the builder---"<<endl;
-    Builder<JsonFileStructure> builderInternallyBuiltObj{make_pair("internally", "built obj")};
+    cout<<"---use built class as internally created by the builder with variadic template---"<<endl;
+    TemplateBuilder<JsonFileStructure> builderInternallyBuiltObj{make_pair("internally", "built obj")};
     builderInternallyBuiltObj.AddItem(make_pair("new", "item"));
     
-    for(auto&& keyVal : builderInternallyBuiltObj.GetBuiltObject().GetJsonFileStructure())
-    {
-        cout<<keyVal.first<<" "<<keyVal.second<<endl;
-    }
-    
-    cout<<"=============="<<endl;
-    
-    Builder<JsonFileStructure> test{make_pair("2", "22")};
-    test.AddItem(make_pair("55", "5"));
-    
-    for(auto&& keyVal : test.GetBuiltObject().GetJsonFileStructure())
+    for(auto&& keyVal : builderInternallyBuiltObj().GetJsonFileStructure())
     {
         cout<<keyVal.first<<" "<<keyVal.second<<endl;
     }
 
-    cout<<"---use Builder class as private class to the Builder, with dependeces on each other, enforcing adding new item via the Builder instance---"<<endl;
+    cout<<"---use Builder class as private class to the Builder, with dependences on each other, enforcing adding new item via the Builder instance---"<<endl;
     
     Built builtObject = Built::GetStaticPrivateBuilder().AddItem(make_pair("private builder", "locally constructed in static getter"))
                                                         .AddItem(make_pair("add item using private builder", "-271.3"))
