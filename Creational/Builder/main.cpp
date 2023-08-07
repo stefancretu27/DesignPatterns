@@ -87,13 +87,13 @@ int main()
 
     cout<<"---use Builder class as private class to the Builder, with dependeces on each other, enforcing adding new item via the Builder instance---"<<endl;
     
-    Built builtObject{};
-    builtObject.GetPrivateBuilderInstance().AddItem(make_pair("template builder", "with singleton and CRTP"));
-    builtObject.GetPrivateBuilderInstance().AddItem(make_pair("add item to template builder", "-271.3"));
+    Built builtObject = Built::GetStaticPrivateBuilder().AddItem(make_pair("private builder", "locally constructed in static getter"))
+                                                        .AddItem(make_pair("add item using private builder", "-271.3"))
+                                                        .AddItem(make_pair("another object", "added in chained fashion"))();
     builtObject.DisplayContents();
     
-    Built anotherBuiltObject{make_pair("another", "built object")};
-    anotherBuiltObject.GetPrivateBuilderInstance().AddItem(make_pair(" newly built object", "new item"));
+    Built anotherBuiltObject = Built::GetStaticPrivateBuilder(make_pair(" newly built object", "using Builder's variadic template c-tor"))
+                                                               .AddItem(make_pair("another", "built object")).ConstructObject();
     anotherBuiltObject.DisplayContents();
 
     return 0;
