@@ -1,5 +1,6 @@
 #include "InnerFactory.hpp"
 #include "AbstractFactory/AbstractFactoryBuilder.hpp"
+#include "InheritanceHierarchy.hpp"
 
 #include <vector>
 
@@ -57,6 +58,23 @@ int main()
     {
         cout<<elem.first<<" "<<elem.second->getPrice()<<endl;
     }
+
+    cout<<"---inheritance hierarchy with factory singleton integrated in interface"<<endl;
+    CreatedClass obj1 = CreatedClass::GetFactory().CreateInstance(1, 2.7182, "aha");
+    obj1.Display();
+    
+    CreatedClass obj2 = CreatedClass::GetFactory().CreateInstance(2, 3.14159, "2nd inst");
+    obj2.Display();
+    
+    
+    auto interfaceInstance = Interface::GetFactory().CreateInstance(55, -273.7);
+    interfaceInstance->DisplayContents();
+    
+    auto interfaceInstance2 = Interface::GetFactory().CreateInstance(16);
+    interfaceInstance2->DisplayContents();
+    
+    auto interfaceInstance3 = Interface::GetFactory().CreateInstance(-9, 1.01, string("qaz"));
+    interfaceInstance3->DisplayContents();
 
     return 0;
 };
