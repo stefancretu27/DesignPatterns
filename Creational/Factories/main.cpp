@@ -36,17 +36,19 @@
 * pointers/references to the abstract class/interface of the constructed-to-be objects.
 */
 
-//explicitly instantiate static const member
-const unique_ptr<Person::PersonFactory> Person::factory {make_unique<Person::PersonFactory>()};
-
 int main()
 {
-    Person::factory->createPerson("Bill");
-    Person::factory->createPerson("Oana");
+    cout<<"---Inner factory example: factory class implemented as private of the created class with its instance retrieved as Singleton---"<<endl;
+    Person p1 = Person::GetFactory().CreatePerson("Bill");
+    Person p2 = Person::GetFcatory().CreatePerson("Oana");
 
+    p1.GetDetails();
 
     //--------------------------------------------------
-
+    cout<<"---Abstract factory with builder: an interface implemented by multiple classes has a corresponding factory abstract class that is implemented in its turn";
+    cout<<" by factory classes corresponding to each implementing class. Then, a multiton GetFactory() method of the abstract factory builder handles and returns the needed factory from the map";
+    cout<<"constrcucting the collection of objects in phases, as with builder, using the such retrieved factory.---"<<endl;
+    
     AbstractFactoryBuilder factoryBuilder{};
     factoryBuilder.addItemToBasket("fruit", 1.1, 2.73)
                     .addItemToBasket("veggie", 0.95, 1.7)
@@ -59,6 +61,7 @@ int main()
         cout<<elem.first<<" "<<elem.second->getPrice()<<endl;
     }
 
+    //--------------------------------------------------
     cout<<"---inheritance hierarchy with factory singleton integrated in interface"<<endl;
     CreatedClass obj1 = CreatedClass::GetFactory().CreateInstance(1, 2.7182, "aha");
     obj1.Display();
