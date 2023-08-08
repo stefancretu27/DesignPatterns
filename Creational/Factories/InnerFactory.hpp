@@ -1,5 +1,6 @@
 #include <string>
 #include <memory>
+#include <iostream>
 
 /*
 * Implement static PersonFactory, as a Singleton private class, that creates Person instances
@@ -28,6 +29,10 @@ class Person
             return factory;
         };
 
+        void GetDetails() const
+        {
+            std::cout<<mId<<" "<<mName<<std::endl;
+        }
     private:
         int mId;
         std::string mName;
