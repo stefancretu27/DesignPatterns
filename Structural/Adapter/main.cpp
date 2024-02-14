@@ -13,14 +13,14 @@ using namespace std;
 * One example is converting a more concrete type to a general one, or to another one as derived as it is.
 * Another example is conversion from type A back to the type B that A is composed from. 
 *
-* Procedure: 
-*   1. the adaptee is encapsulated in a Adapter class that inherits from the class it has to adapt to.
-* That is because the prpocess logic requires an object of type Adapte to to work with, so such an object
-* nneds to be constructed from an adaptee. So the Adapter class extends from the Adapted to class.
-*   2. The adapter class c-tor takes as input the adaptee and uses it to build the class, or parts of the class
-* it inherits from.
+* Implementtaion-wise, it involves creating a separate class, named Adapter, which inherits from the
+* class/interface to adapt to. Next to that, it holds and Adapted class instance or interface ref/ptr,
+* which is used when overriding the inherited behavior from the AdaptTo class, including afferent data 
+* conversions and processing. Also, it candefines methods whose implementations perform further adaptations.
 *
-* This way, the structure of the Adaptee is changed to the Adapted To format.
+* This way, the newly created Adapter class/interface reuses the AdaptTo interface, eventually extending it, 
+* to encapsulate and customize the Adapted interface calls to be used via the AdaptTo interface. Consequently,
+* via the Adapter class, the Adapted class' interface is used as if it was AdaptedTo, with no need to be rewritten.
 */
 
 void printArea(const Rectangle& rectangle)
