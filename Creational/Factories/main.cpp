@@ -7,10 +7,11 @@
 /*
 * Brief description:
 * Factory is a design pattern used to deletegate the construction of instances of a class to
-* another class. Implementation-wise, the latter encapsulates a Create() method which can take
-* the required arguments for constructing the instance, whilst can perform further processing/
-* cusotmization before calling the ctor of the factroied class. If it is not envisaged to 
-* allow direct calls to ctor, it can be mad eprivate in the factoried class.
+* another class, named Factory, for example. Implementation-wise, the latter encapsulates a 
+* Create() method which can take the required arguments for constructing the instance, whilst 
+* can perform further processing/customization before calling the ctor of the factroied class. 
+* The constructed instance is returned from the Factory class.If it is not envisaged to 
+* allow direct calls to ctor, it can be made private in the factoried class.
 *
 *
 * Description:
