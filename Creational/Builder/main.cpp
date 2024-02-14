@@ -5,11 +5,13 @@
 * Brief description: 
 * Builder is used when the class instance requires construction in multiple steps, either because it 
 * encapsulates a data structure that is populated in phases, or because it is so complex such that requires
-* multiple parameters upon construction, also provided in phases. Implementation-wise, it entails developing 
-* a separate class, called builder, which encapsulates a member instance to the class meant to be built, for
-* which it calls an AddItem method, that returns the builder's instance, such that AddItem can be called in chain.
+* multiple parameters upon construction, also provided in phases. 
+* Implementation-wise, it entails developing a separate class, called builder, which encapsulates a member instance 
+* or pointer to the class meant to be built, for which it calls an AddItem method, that returns the builder's instance, 
+* such that AddItem can be called in chain. The built class returns an instance to the Builder, either constructing 
+* it every time the getter is called, either mapping a Builder instance to key received as argument value to the getter.
 * The Builder class can be friend of the Built class, or implemented in the scope of the Built class, such that
-* it gets access to private members to be constructed.
+* it gets access to private members to be constructed. 
 *
 * Description:
 * The builder design pattern provides a mechanism that allows the creation of a class to take place in steps.
