@@ -5,10 +5,19 @@
 #include <vector>
 
 /*
+* Brief description:
+* Factory is a design pattern used to deletegate the construction of instances of a class to
+* another class. Implementation-wise, the latter encapsulates a Create() method which can take
+* the required arguments for constructing the instance, whilst can perform further processing/
+* cusotmization before calling the ctor of the factroied class. If it is not envisaged to 
+* allow direct calls to ctor, it can be mad eprivate in the factoried class.
+*
+*
+* Description:
 * Factory design pattern provides a mechanism that allows for an easier construction of objects
-* whose ctor do not provide an explicit enough API or which require customization upon creation.
-* Thus, the customization togetehr with class instantiation are delegated to a factory class,
-* which aims at providing a simple API for opbject"s creation while hiding customization>
+* whose ctors do not provide an explicit enough API or which require customization upon creation.
+* Thus, the customization together with class instantiation are delegated to a factory class,
+* which aims at providing a simple API for opbjects' creation while hiding customization.
 * It differs from builder as it does not entail piece wise creation of the object, as no
 * container of objects is involved in construction phase.
 *
