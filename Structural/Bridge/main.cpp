@@ -6,7 +6,7 @@
 using namespace std;
 
 /*
-* Bridge is a structural pattern that  decouples interface users from the interface implementation(s).
+* Bridge is a structural pattern that decouples interface users from the interface implementation(s).
 * The interface users and interface implementation(s) can exists as hierarchies, as in the interface can
 * have multiple implementations, and the users of the interfaces can have further specializations
 * (derived classes).
@@ -29,9 +29,29 @@ using namespace std;
 *   3. The root abstract class aggregates a ref to the new interface, that is created via ctor. Then,
 * the corresponding implementation's instance is passed along upon construction.
 *
-* A particular example of Bridge is Pimpl idiom, which uses an internal pointer to implementation in order
-* to decouple a class interface from the methods' implementations. The class uses a privately defined Impl
-* class, which is entirely defined in the source code file and only forward declared in the header. 
+* In particular, PImpl is a typical technique to reduce the shown compilation dependency. 
+* The PImpl idiom aims to have a stable ABI and to reduce the compilation time. Separating interface from
+* implementation, the private members are moved to a newly constructed class, Impl, that the bridged
+* class encapsulates a member ptr to. Thus, any changes to the implementation require recompilation of
+* the .cpp file containing Impl class definition, but not of the .cpp files using the bridged class' interface
+* This way, it decouples a class/interface user, from its implementation, by trading off composition in favor 
+* of aggregation, with the composition being deferred to the Impl class. 
+* Implementation-wise, the bridged class must explicitly delcare c-tor and d-tor and define them in the source 
+* code file, after the Impl class is defined. This wsay, the Impl class would appear as a complete type when the 
+* c-tor and d-tor of the bridged class will csall the c-tor and d-tor of the member unique_ptr to Impl class.
+*
+*        __________________________            _____________________________
+*        |     Bridged.hpp        |            |        Bridged.cpp        |
+*        |{                       |            |                           |
+*        | private:               |            |class Bridged::Impl        |
+*        | class Impl;            |            |{                          |
+*        | unique_ptr<Impl> impl; |            | private:                  |
+*        |}                       |            | Class1 instClass1;        |
+*        |________________________|            | Class2 instClass2;        |
+*                                              |}                          |
+*                                              |                           | 
+*                                              | Bridged implementation    |
+*                                              |___________________________|
 */
 
 void renderingUsingBridge(const Shape& shape)
