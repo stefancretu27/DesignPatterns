@@ -5,9 +5,13 @@
 using namespace std;
 
 /*
-* Adapter is a structural design pattern that involves the developemnt of a new piece of code
+* Problem: an interface is widely used in the program and another interface, approximately related,
+* is needed to be used. Instead of writting separate code to comply to call of the second interface,
+* the latter is adapted to the widely used one, such that it can be used in a identical manner.
+*
+* Adapter is a structural design pattern that involves the development of a new piece of code
 * which perform conversions between an existing interface to required interfaces. It can be
-* an interface per see, or a method's signature.
+* an interface per see, or a method's signature. 
 * 
 * Often, this process entails conversions between data types, so they should be related.
 * One example is converting a more concrete type to a general one, or to another one as derived as it is.
