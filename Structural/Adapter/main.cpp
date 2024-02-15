@@ -21,6 +21,19 @@ using namespace std;
 * This way, the newly created Adapter class/interface reuses the AdaptTo interface, eventually extending it, 
 * to encapsulate and customize the Adapted interface calls to be used via the AdaptTo interface. Consequently,
 * via the Adapter class, the Adapted class' interface is used as if it was AdaptedTo, with no need to be rewritten.
+*
+*     _________________________________
+*     |    AdaptTo  - known interface |
+*     | widely used in the program    |
+*     |_______________________________|
+*             /|\
+*              |  Inherits/extends
+*              |    
+*     _________|______________________________________                   ______________________________________
+*     |   Adapter - newly implemented interface      |   Aggregation     |    Adapted - existing interface    |
+*     |   extends known interface. Inherited methods | /_________________| must be used as AdaptTo interface  |
+*     | wrap calls to Adapted methods + conversions  | \                 |____________________________________|
+*     |______________________________________________|
 */
 
 void printArea(const Rectangle& rectangle)
