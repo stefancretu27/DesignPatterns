@@ -3,7 +3,9 @@
 #include "SingleValue_ManyValues.hpp"
 
 /*
-* The composite design pattern involves treating scalar and composed objects in a similar manner.
+* The composite design pattern involves treating scalar and composed objects in a similar manner. Thus, classes that
+* encapsulate scalars and those encapsulating collection of these scalars, get a similar interface. Implementation-wise,
+* it can be a separate interface class that both implement, appropriately.
 *
 * Concretely, there are classes which model the smallest piece in the data set one works with (such as a node in a graph).
 * Also, oftentimes are used classes that encapsulate collections of such pieces (vectors, lists etc), together with the former. 
