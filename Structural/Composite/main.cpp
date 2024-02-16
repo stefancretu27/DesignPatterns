@@ -19,6 +19,30 @@
 * This interface often encapsulates methods that overload begin() and end(), which are methods commonly used in STL containers
 * for iterating over: for loops, range-based for loops (under the hood) etc. As the derived types override this methods, the
 * types they model can be treated afterwards as containers when iterating over.
+*
+*                                _____________________________________
+*                                |             CommonIf -             |
+*                                |    common interface for classes    |
+*                                |    composed of single instances    |
+*                                |    and for classes composed of     |
+*                                |     collections of instances       |
+*                                |                                    |
+*                                | virtual void CommonIf* begin() = 0 |
+*                                | virtual void CommonIf* end() = 0   |
+*                                |____________________________________|
+*                                    ^                        ^
+*                                   /                          \
+*                                  /                            \
+*                        inherits /                              \
+*            ____________________/__________________        ______\_____________________________________  
+*            |  Class with single instance         |        |    Class with collection of instances    |
+*            |    member                           |        |            data member                   |
+*            |                                     |        |                                          |
+*            | virtual void CommonIf* begin()      |        |    virtual void CommonIf* begin()        |    
+*            |        {return this;}}              |        |                {return this;}            |
+*            | virtual void CommonIf* end()        |        |    virtual void CommonIf* end()          |   
+*            |         {return this+1;}            |        |       {return this+collection.size();}   |                   
+*            |_____________________________________|        |__________________________________________|
 */
 
 int main()
