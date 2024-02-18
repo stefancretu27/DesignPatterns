@@ -3,6 +3,7 @@
 
 #include "DynamicDecorator.hpp"
 #include "StaticDecorator.hpp"
+#include "AnotherStaticDecorator.hpp"
 /*
 * Decoratror is a design pattern that allows for adding new functionalities (decorate) to existing classes,
 * without modifying the current implementation of these classes. The decoration happens by implementing a
@@ -117,6 +118,16 @@ int main()
     cout<<decorateRedRose.str()<<endl;
     cout<<decorateRedBlueRose.str()<<endl;
     cout<<RedFlowerDecorator<BlueFlowerDecorator<BlueFlowerDecorator<RedFlowerDecorator<WaterLilyImpl>>>>(noOfFlowers+2).str()<<endl;
+
+    Decorated decoratedInst{"decorated instance"};
+    DecoratorFloat<Decorated> decoratorFloat{3.14159, decoratedInst};
+    DecoratorFloat<DecoratorFloat<Decorated>> decoratorFloatDecoratorFloat{2.7182, decoratorFloat};
+    
+    DecoratorInt<Decorated> decoratorInt{1, decoratedInst};
+    DecoratorInt<DecoratorInt<Decorated>> decoratorIntDecoratorInt{2, decoratorInt};
+    
+    std::cout<<decoratedInst.GetData()<<" "<<decoratorInt.GetData()<<" "<<decoratorIntDecoratorInt.GetData()<<endl;
+    std::cout<<decoratedInst.GetData()<<" "<<decoratorFloat.GetData()<<" "<<decoratorFloatDecoratorFloat.GetData()<<endl;
 
     return 0;
 }
