@@ -6,10 +6,37 @@
 using namespace std;
 
 /*
+* Brief description: 
 * Bridge is a structural pattern that decouples interface users from the interface implementation(s).
-* The interface users and interface implementation(s) can exists as hierarchies, as in the interface can
-* have multiple implementations, and the users of the interfaces can have further specializations
-* (derived classes).
+* The interface users can be other interfaces or their implementation classes, thus complex inheritance
+* hierarchies, that aggregate refs to the used interface. The used interface can gave multiple implementations:
+* either long inheritance chain, or more derivates at the same inheritance level, with any changes in them
+* being opaque to th user classes.
+*
+*        ______________________________                                    ___________________________________ 
+*        |       UserInterface        |                                  / |         UsedInterface           |
+*        |                            |                                 /  |                                 |
+*        | virtual void Method() = 0; |                                /   |  virtual void UsedMethod() = 0; | 
+*        |____________________________|                               /    |_________________________________|
+*                   ^                /\                              /                 ^                     \    
+*                   |                 \               Aggregation   /                  |                      \         
+*                   | inheritance      \                           /                   |                       \    
+*         __________|_______________    \_________________________/                    |                        \   
+*         |        UserImpl1       |     |       UserImpl2        |            ________|___________      ________\___________       
+*         |                        |     |                        |            |     UsedImpl1     |     |     UsedImpl2     | 
+*         | virtual void Method()  |     | virtual void Method()  |            |                   |     |                   |   
+*         |  { mRef.Usedmethod();} |     |  { mRef.Usedmethod();} |            | void UsedMethod() |     | void UsedMethod() |
+*         |                        |     |                        |            |    {Impl1;}       |     |   {Impl1;}        |  
+*         | UsedInterface& mRef;   |     | UsedInterface& mRef;   |            |___________________|     |___________________|
+*         |________________________|     |________________________|                    ^
+*                                                                                      |          
+*                                                                                      |  
+*                                                                               _______|____________
+*                                                                               |  UsedImpl1_1      |   
+*                                                                               |                   |
+*                                                                               | void UsedMethod() |
+*                                                                               |    {Impl1_1;}     |
+*                                                                               |___________________| 
 *
 * Long derivation hierarchies, involving at least 2 classes per each derived level, when relatively
 * similar specializations are done for the first derived level, as the 2nd level being merely users of their
