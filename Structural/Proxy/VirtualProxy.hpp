@@ -5,12 +5,12 @@
 using namespace std;
 
 /*
-* The task is to create a ResposniblePerson class that acts a s aproxy for Person
-* such that a person is allowed to drink if the age is at least 18, otherwise return
+* The task is to create a ResponsiblePerson class that acts as a proxy for Person class
+* such that a Person instance is allowed to drink if the age is at least 18, otherwise return
 * "too young". Similarily, it is done for driving, but age treshold is 16. If drinking
 * and driving, then return "dead".
 *
-* In order to do that, an interface must be implemented. The requirements of proxy state
+* In order to do that, an interface must be implemented. The requirements of proxy state that
 * the proxied class and the proxy class must have identic interface. Therefore, all public
 * methods, but ctor, of person are made virtual methods of the interface. The proxy class
 * adds functionality when overriding the virtual methods and uses the encapsulated instance
