@@ -52,8 +52,9 @@
 * 2) Static decorator: it also involves the creation of a new decorator class. In this case, it is a template
 * class that inherits from the template parameter type T (as in public T). The common interface is still used
 * as T should implement it, but it is not necessary for the Decorator to implement it, which inherits from
-* the interface implementation that is also its template type parameetr T. This approach is referred 
-* to as mixing inheritance.
+* the interface implementation that is also its template type parameter T. This approach is referred 
+* to as mixing inheritance. A member instance/ref to the Decorated class is not necessary, as long as the
+* Decorator inherits from it.
 * This way, a Decorator object has the Decorated object as its sub object, so it can access all its members,
 * including methods particular to T, but which are not available via the interface. This thing is not possible
 * with dynamic decorator. Surely, it involves having access to implementations of the interface.
