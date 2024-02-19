@@ -27,8 +27,8 @@
 * by both proxied and proxy class. Furthermore, the proxy class encapsulates an instance, or a pointer
 * to the proxied class, which is used to retrieve data from the proxy object, by calling its methods,
 * when overriding. During overriding, the proxy class adds new functionality into the overrides.
-* It acts merely as a dynamic decorator, only that it keeps an instance/ref/pr to Proxied class, not
-* to the interface. It has a similar structure with Dynaqmic Decorator.
+* It acts merely as a Dynamic Decorator, only that it keeps an instance/ref/pr to Proxied class, not
+* to the interface.
 *
 *                                    ____________________________________
 *                                    |           Interface -             |
