@@ -5,6 +5,13 @@
 using namespace std;
 
 /*
+*
+* Brief description: Translate one interface into another one.
+*
+* Use Cases
+*    A class does not have the required interface
+*    Definition of a general interface for a set of similar classes
+*
 * Problem: an interface is widely used in the program and another interface, approximately related,
 * is needed to be used. Instead of writting separate code to comply to call of the second interface,
 * the latter is adapted to the widely used one, such that it can be used in a identical manner.
