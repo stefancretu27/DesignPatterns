@@ -17,10 +17,11 @@ using namespace std;
 * One example is converting a more concrete type to a general one, or to another one as derived as it is.
 * Another example is conversion from type A back to the type B that A is composed from. 
 *
+* 1) Object adapter
 * Implementtaion-wise, it involves creating a separate class, named Adapter, which inherits from the
-* class/interface to adapt to. Next to that, it holds and Adapted class instance or interface ref/ptr,
+* class/interface to adapt to. Next to that, it holds an Adapted class instance or interface ref/ptr,
 * which is used when overriding the inherited behavior from the AdaptTo class, including afferent data 
-* conversions and processing. Also, it candefines methods whose implementations perform further adaptations.
+* conversions and processing. Also, it can define methods whose implementations perform further adaptations.
 *
 * This way, the newly created Adapter class/interface reuses the AdaptTo interface, eventually extending it, 
 * to encapsulate and customize the Adapted interface calls to be used via the AdaptTo interface. Consequently,
@@ -37,6 +38,28 @@ using namespace std;
 *     |   Adapter - newly implemented interface      |   Aggregation     |    Adapted - existing interface    |
 *     |   extends known interface. Inherited methods | /_________________| must be used as AdaptTo interface  |
 *     | wrap calls to Adapted methods + conversions  | \                 |____________________________________|
+*     |                                              |      
+*     | Adapted& mref;                               |
+*     |______________________________________________|
+*
+* 2) Class Adapter:
+* Unlike object adapter, which involve sinjecting a dpendecy in the Adapter class, that holds a private
+* ref/ptr to the Adapted interface, the class Adapter does not use any class instantiation. Instead, it
+* privately inherits from the Adapted interface, so it can use  calls to its methods in its internal
+* implementation. Likewise Object Adapter, it publicly inherits from the AdaptTo interface, overriding
+* its methods, that wrap calls to Adapted interface.
+*     _________________________________
+*     |    AdaptTo  - known interface |
+*     | widely used in the program    |
+*     |_______________________________|
+*             /|\
+*              |  Inherits/extends
+*              |    
+*     _________|______________________________________                  ______________________________________
+*     |   Adapter - newly implemented interface      |   Inheritance    |    Adapted - existing interface    |
+*     |   publicly extends the used interface and    | ________________\| must be used as AdaptTo interface  |
+*     | privately extends thge Adapted interface,    |                 /|____________________________________|
+*     |thus being able to call its methods           |
 *     |______________________________________________|
 */
 
