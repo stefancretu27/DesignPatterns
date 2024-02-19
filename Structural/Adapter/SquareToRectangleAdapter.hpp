@@ -25,7 +25,7 @@ struct Rectangle
 };
 
 //the Adapter aggregates the adaptee
-struct SquareToRectangleAdapter : Rectangle
+struct SquareToRectangleAdapter : public Rectangle
 {
     SquareToRectangleAdapter(const Square& square)
     {
