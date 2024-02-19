@@ -3,13 +3,8 @@
 
 
 /*
-* Proxy is a design pattern that offers a mechanism to access a resource, which can be remote.
-* It acts as a wrapper over the proxied object and offers exactly the same interface as the
-* proxied object, such that the object is used the same way it was used before the proxy existed.
-* Additionaly, proxy controls lifetime of the proxied object. However, proxy methods can add further 
-* functionality in its interface methods. Smart pointers, lock wrappers are examples of proxies and,
-* in general, ani class implementing the RAII idiom acts as a proxy (as it controls access and the
-* lifetime of the wrapped objects).
+* Brief description:
+* Provides a placeholder (proxy object) for accessing another object (resource).
 *
 * Use Case: Control access to another object
 *        Remote proxy (acts as an intermediary for a remote service)
@@ -17,6 +12,14 @@
 *        Security proxy (adds security to a request)
 *        Caching proxy (delivers cached requests)
 *
+* Description:
+* Proxy is a design pattern that offers a mechanism to access a resource, which can be remote.
+* It acts as a wrapper over the proxied object and offers exactly the same interface as the
+* proxied object, such that the object is used the same way it was used before the proxy existed.
+* Additionaly, proxy controls lifetime of the proxied object. However, proxy methods can add further 
+* functionality in its interface methods. Smart pointers, lock wrappers are examples of proxies and,
+* in general, ani class implementing the RAII idiom acts as a proxy (as it controls access and the
+* lifetime of the wrapped objects).
 *
 * 1) Virtual proxy
 * Implementation wise, it involves creating an interface class that encapsulates as pure virtual methods
