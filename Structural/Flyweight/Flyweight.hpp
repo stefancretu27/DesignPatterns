@@ -8,10 +8,16 @@
 using namespace std;
 
 /*
-* Flyweight singleton class that can eb used by other classes that want to store strings
+* Flyweight singleton class that can be used by other classes that want to store strings
 * in an efficient way. The storage of duplicate strings is avoided as a map keeps track of
 * all strings. They key is a hash of the input string, computed using hash<string> 
 * template struct specialization.
+*
+* template<class Key> struct hash - is a template structure that provides a default c-tor 
+* and the operator(), which has an argument of type Key and returns size_t, a result value 
+* storing the hash value of the parameter. It does not throw exceptions.
+* For two parameters k1 and k2 that are equal, std::hash<Key>()(k1) == std::hash<Key>()(k2),
+* and if k1!=k2 the probability of their hashes to be equal is very small.
 */
 
 class NameStorage
