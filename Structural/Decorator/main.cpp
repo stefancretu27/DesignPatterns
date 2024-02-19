@@ -6,7 +6,7 @@
 #include "AnotherStaticDecorator.hpp"
 /*
 * Brief description:
-* Dynamically extends an object with responsibilities. Also known as Wrapper.
+* Dynamically extends an object with responsibilities. 
 *
 * Use Case:
 *    Add or remove new responsibilities from individual objects at run time
