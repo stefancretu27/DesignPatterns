@@ -5,7 +5,14 @@
 #include "StaticDecorator.hpp"
 #include "AnotherStaticDecorator.hpp"
 /*
-* Decoratror is a design pattern that allows for adding new functionalities (decorate) to existing classes,
+* Brief description:
+* Dynamically extends an object with responsibilities. Also known as Wrapper.
+*
+* Use Case:
+*    Add or remove new responsibilities from individual objects at run time
+*    The enhancement of the class hierarchy using subclassing (see Adapter Pattern) is not applicable
+*
+* Decorator is a design pattern that allows for adding new functionalities (decorate) to existing classes,
 * without modifying the current implementation of these classes. The decoration happens by implementing a
 * new class, that decorates th existing one.
 *
@@ -15,7 +22,7 @@
 * the same (common) interface. Thus, if the Decorated class does not have a separate interface class that
 * it extends, it must provide one, which will also be implemented by the newly created Decorator class.
 * The inheritance from the same interface is necessary as the Decorator implements new functionalities for 
-* the existing virtual methods, thus respecting the open-closed principle. 
+* the existing virtual methods, thus respecting the open-closed principle. Quite similar to Object Adapter.
 * Nonetheless, this approach does not allow to decorate methods proper to Decorated class, but only the
 * virtual methods exposed via the interface class.
 *
