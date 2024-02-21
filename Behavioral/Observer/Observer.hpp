@@ -1,23 +1,37 @@
 #pragma once
 
 #include <iostream>
-#include <string>
-using namespace std;
+#include <map>
 
-#include "Observable.hpp"
-
-template<class T>
-class Observer
+//The Observer exposes an interface, aiming for decoupling, which uses a template type parameter for the type it observes 
+template<class ObservedInterface>
+class ObserverInterface
 {
     public:
-    virtual void fieldChanged(T& sourceObject, const string& name) = 0;
+    //process change form the observed instance where it occurred
+    virtual void ProcessChange(const ObservedInterface& observedObj) = 0;
+    virtual ~ObserverInterface() = default;
 };
 
-class MyObserver: public Observer<MyObservableClass>
+//The Observer interface implementation, also a template, implements the above interface
+template<class ObservedInterface>
+class ObserverImplementation : public ObserverInterface<ObservedInterface>
 {
     public:
-    void fieldChanged(MyObservableClass& sourceObject, const string& name) override
+    ObserverImplementation()
     {
-        cout<<name<<" has changed to "<<sourceObject.getValue()<<endl;
-    };
+        static size_t idx{};
+        observersIds[this] = idx++;
+    }
+    
+    virtual void ProcessChange(const ObservedInterface& observedObj)
+    {
+        std::cout<<"Subscriber: "<<observersIds[this]<<" processed notification "<<observedObj.GetData()<<std::endl;
+    }
+    
+    private:
+    static std::map<ObserverImplementation<ObservedInterface>*, size_t> observersIds;
 };
+
+template<class ObservedInterface>
+std::map<ObserverImplementation<ObservedInterface>*, size_t> ObserverImplementation<ObservedInterface>::observersIds;
