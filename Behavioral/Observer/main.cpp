@@ -69,10 +69,16 @@
 
 int main()
 {
-    MyObservableClass obj{3};
-    MyObserver observer{};
-
-    obj.subscribe(observer);
-    obj.setValue(7);
+    ObservableClass observed;
+	//ObserverImplementation<ObservableClass> observer;
+	auto observer = make_shared<ObserverImplementation<ObservableClass>>();
+	observed.Subscribe(observer);
+	observed.SetData("data change");
+	observed.NotifyOne(observer);
+	
+	observed.Subscribe(make_shared<ObserverImplementation<ObservableClass>>());
+	observed.SetData("update data change");
+	observed.NotifyAll();
+    
     return 0;
 }
