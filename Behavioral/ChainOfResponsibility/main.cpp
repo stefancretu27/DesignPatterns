@@ -5,7 +5,9 @@
 /*
 * Chain of responsibility represents a chain of components that process a command or query, allowing for terminating 
 * the processing with either a successful result or not. A common implementation example is linked list which uses
-* pointer to self type to indicate to next/prev nodes. 
+* pointer to self type to indicate to next/prev nodes, containing refs/ptrs to dynamically polymorphic types. On each
+* such ref/ptr a query is performed, with the query might following the Command pattern. The result for one such node
+* depends on values in/or number of other nodes.
 *
 * A particular implementation is broker chain that makes use of a centralized list of pointers to the type it queries,
 * that can be encapsulated in a separate structure (hence the idea of centralized list), or as member to the top class. 
@@ -18,7 +20,7 @@
 *    ___________________________________                 _____________________________________________________
 *    |    struct ChainOfResponsibility  |                |                  QueriedInterface                 |                                  
 *    |                                  |  Aggregates    |                                                   |        
-*    | vector<QueriedInterface*> vec;   |--------------->| virtual void query(void* source, Query& q) = 0;   | 
+*    | vector<QueriedInterface*> vec;   |--------------->| virtual void query(QueryType& q) = 0;             | 
 *    |                                  |                |                                                   |
 *    |                                  |                | ChainOfResponsibility chainOfRes;                 |
 *    |__________________________________|                |___________________________________________________|
@@ -29,22 +31,23 @@
 *                                                        ________________________|_______________________________
 *                                                        |              Interface implementation                |
 *                                                        |                                                      |  
-*                                                        | void query(void *source, Query &q) override          |
-*                                                        | {    if(source==this)                                |
+*                                                        | void query(QueryType &q) override                    |
+*                                                        | {  iterate over chainOfRes.vec                       |
+*                                                        |      if(source==this)                                |
 *                                                        |            ProcessQueryToSelf(q)                     |
-*                                                        |                {iterate over vec};                   |
 *                                                        |       else                                           |
 *                                                        |           ProcessQueryToOthers(q)                    |      
 *                                                        |______________________________________________________|
-**                                                                               ^
+*                                                                               ^
 *                                                                                |    
 *                                                                                | Implements
 *                                                                                |    
 *                                                        ________________________|___________________________
 *                                                        |           Implementation 2nd level               |
 *                                                        |                                                  |  
-*                                                        | void query(void *source, Query &q) override      |
-*                                                        | {    if(source==this)                            |
+*                                                        | void query(QueryType &q) override                |
+*                                                        | {  iterate over chainOfRes.vec                   |
+*                                                        |      if(source==this)                            |
 *                                                        |            ProcessQueryToSelf(q);                |
 *                                                        |       else                                       |
 *                                                        |           ProcessQueryToOthers(q); }             |      
