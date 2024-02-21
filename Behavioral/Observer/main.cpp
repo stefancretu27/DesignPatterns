@@ -9,7 +9,27 @@
 *
 * Implementation-wise, observer is a class which subsribes to get notification from the observable class. The observer
 * tipically executes a routine, a callback called sometimes, when it receives the notification/signal. 
-* 
+*
+*    ______________________________________________________                        _________________________________________________
+*    |  template<class ObservedType>                       |      Uses             | class Observed/Notifier/Publisher/Signal       |
+*    |  class Observer/Notified/Subscriber/Slot            |---------------------->|                                                |  
+*    |  {                                                  |                       | vector<Observer*> observersList;               |
+*    |    void ProcessNotification(ObservedType& notifier) |                       |                                                |  
+*    |    {                                                |                       | void NotifyOne(Observer* notifiedObserver)     |
+*    |        notifier.GetChange();                        |   Aggregates          |   { notifiedObserver->ProcessChange(*this);}   |
+*    |    }                                                |<----------------------|                                                |   
+*    |  }                                                  |                       | void Subscribe(Observer* subscriber)           |   
+*    |_____________________________________________________|                       |   { observersList.push_back(subscriber);}      |
+*                                                                                  |                                                |
+*                                                                                  | void Unsubscribe(Observer* unsubscriber)       |  
+*                                                                                  |   {  remove_it = remove(unsubscriber);         |
+*                                                                                  |      observersList.erase(remove_it, end());}   |
+*                                                                                  |                                                |
+*                                                                                  | void NotifyAll()                               |
+*                                                                                  |   { for(auto observer* : observersList)        |
+*                                                                                  |        observer->ProcessChange(*this); }}      |
+*                                                                                  |________________________________________________|  
+*
 * This callback's signature is being made accessible via an interface, which can be template, such that when the Observer class 
 * implements it, it can explicitly state which observable class it whishes to observe. In addition, the template type parameter 
 * is used as a placeholder for the data type of the source object, which launched the signal/event. This object would be an instance
