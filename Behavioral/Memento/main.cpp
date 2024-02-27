@@ -8,10 +8,41 @@
 *
 * Implementation wise it involves the creation of a separate class, called Memento, which
 * encapsulates similar data members as the class for which it will hold snapshots. Then,
-* in the snapshoted class methods that modify its field values, the field values of the
-* memento are updated similarily. In other terms, the memento acts as backup data storage.
-* Then, these emthods return a memento object, representing the current state. This object
-* can eb used afterwards to revert to its values (passed as an argument to a revert method).
+* in the snapshoted class, methods that modify its field values, also update the field values of the
+* memento. In other terms, the memento acts as backup data storage.
+* Then, these methods return a memento object, representing the current state. This object
+* can be used afterwards to revert to its values (passed as an argument to a revert method).
+*
+*             ________________________________                       _________________________________________________________
+*            |        struct Memento         |                       |             User class                                |
+*            |                               |                       |                                                       |  
+*            | string state;                 |    Uses               | vector<Memento> mementoSnapshots;                     |
+*            |                               |<----------------------| string mData;                                         |
+*            |                               |                       | size_t snapshotIndex{};                               |      
+*            |_______________________________|                       |                                                       |
+*                                                                    | Memento(const string& data):mData{data}               |  
+*                                                                    | {    mementoSnapshots.push_back({data});              |
+*                                                                    |       ++snapshotIndex;                                | 
+*                                                                    | }                                                     |
+*                                                                    |                                                       |
+*                                                                    | void Revert(size_t snapIdx)                           |
+*                                                                    | {mData = mementoSnapshots[snapIdx].state;             |
+*                                                                    |    snapshotIndex = snapIdx;                           |
+*                                                                    |                                                       |
+*                                                                    | Memento UpdateData(const string& data)                |
+*                                                                    | { mData = data;                                       |
+*                                                                    |   ++snapshotIndex;                                    |
+*                                                                    |   Memento result{{data}};                             |   
+*                                                                    |   mementoSnapshots.push_back(result);                 |
+*                                                                    |   return result;}                                     |
+*                                                                    |                                                       |
+*                                                                    | void Revert(Memento& snapshot)                        |
+*                                                                    | {for(auto idx{}; idx<mementoSnapshots.size(); ++idx)  |
+*                                                                    |        if(snap==snapshot)                             |
+*                                                                    |        {  mData = snap.state;                         |
+*                                                                    |            snapshotIndex = idx;}}                     |
+*                                                                    |_______________________________________________________| 
+*       
 *
 * The Memento class does not implement methods that can change the stored snapshots. A memento
 * object is immutable and not to be used for performing changes on data it stores.
