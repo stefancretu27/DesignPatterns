@@ -6,7 +6,7 @@
 using namespace std;
 
 /*
-* Provided Token and Mememnto structs, together with TokenMachine struct,
+* Provided Token and Memento structs, together with TokenMachine struct,
 * it is required to implement add_token and revert methods such that they encapsulate
 * the logic of memento. The add_token method receives as argument an shared_ptr so it
 * is advised to take care to the cases when the shared_ptr is used externally to change the
