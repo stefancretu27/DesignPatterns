@@ -5,8 +5,8 @@
 * aware of each other's presence/absence (such as participants in a chat room).
 *
 *    ________________________________________________                 __________________________________________
-*    |  template<class T>  class Mediator            |   Aggregates   | template<class T> MediatedInterface    |             
-*    |                                               |<---------------|                                        |
+*    |  template<class T>  class Mediator            |   Uses         | template<class T> MediatedInterface    |             
+*    |                                               |--------------->|                                        |
 *    | vector<Interface*> mediatedObjs;              |                | virtual void DoWork(const T& msg) = 0; | 
 *    |                                               |                | virtual void ValueUpdate(int val = 0); |
 *    |void Broadcast(Interface* source, const T& msg)|                |________________________________________|
@@ -15,8 +15,8 @@
 *    |    {    if(ptr!=source)                       |                                     |   Inherits    
 *    |           ptr.DoWork(msg);                    |                                     |    
 *    |    }                                          |                 ____________________|___________________________
-*    | }                                             |                |            MediatedClass                       |
-*    | void Unicast(Interface* src, Interface* dst)  |                |                                                |
+*    | }                                             |   Composition  |            MediatedClass                       |
+*    | void Unicast(Interface* src, Interface* dst)  |<---------------|                                                |
 *    | {    if(ptr!=source)                          |                | Mediator<int> mediatorInst;                    |
 *    |            ptr.DoWork(); }                    |                |                                                |
 *    |_______________________________________________|                | MediatedClass()                                |
