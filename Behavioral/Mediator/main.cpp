@@ -4,6 +4,31 @@
 * Mediator is a design pattern that facilitates communication between components which are not
 * aware of each other's presence/absence (such as participants in a chat room).
 *
+*    ________________________________________________                 __________________________________________
+*    |  template<class T>  class Mediator            |   Aggregates   | template<class T> MediatedInterface    |             
+*    |                                               |<---------------|                                        |
+*    | vector<Interface*> mediatedObjs;              |                | virtual void DoWork(const T& msg) = 0; | 
+*    |                                               |                | virtual void ValueUpdate(int val = 0); |
+*    |void Broadcast(Interface* source, const T& msg)|                |________________________________________|
+*    | {                                             |                                     ^
+*    |    for(Interface* ptr : mediatedObjs)         |                                     |   
+*    |    {    if(ptr!=source)                       |                                     |   Inherits    
+*    |           ptr.DoWork(msg);                    |                                     |    
+*    |    }                                          |                 ____________________|___________________________
+*    | }                                             |                |            MediatedClass                       |
+*    | void Unicast(Interface* src, Interface* dst)  |                |                                                |
+*    | {    if(ptr!=source)                          |                | Mediator<int> mediatorInst;                    |
+*    |            ptr.DoWork(); }                    |                |                                                |
+*    |_______________________________________________|                | MediatedClass()                                |
+*                                                                     | { mediatorInst.mediatedObjs.push_back(*this);} |
+*                                                                     |                                                |
+*                                                                     | void ValueUpdate(int val)                      |
+*                                                                     | { mediatorInst.Broadcast(*this, val);}         |
+*                                                                     |                                                |
+*                                                                     | void DoWork(const T& msg)                      |
+*                                                                     | {  cout<<msg;}                                 |         
+*                                                                     |________________________________________________|
+*
 * Implementation wise it is a class or component that encapsulates some business logic which
 * is used by other classes/components when communicating. That said, other component call
 * the mediator's methods. Moroever, the mediator can call methods from the components that use it.
