@@ -9,13 +9,13 @@
 * abstract class, which is inherited and overriden by specific implementation classes. Lastly, these implementations
 * are instantiated in order to be used for invoking the encapsulated behaviors.
 *
-*             _________________________________________________                    
-*            |    TemplateMethodInterface                     |                         
-*            |                                                |
-*            | void GenericAlgorithm(){SpecificAlgorithm();}  |  
-*            | virtual void SpecificAlgorithm() = 0;          |                        
-*            |________________________________________________|                        
-*                    ^                           ^                                 
+*             _________________________________________________                         _____________________________________         
+*            |    TemplateMethodInterface                     |                         |            User class              |             
+*            |                                                |<------------------------|                                    |
+*            | void GenericAlgorithm(){SpecificAlgorithm();}  |                         | TemplateMethodInterface& tmi;      |
+*            | virtual void SpecificAlgorithm() = 0;          |                         |                                    |
+*            |________________________________________________|                         | tmi.GenericAlgorithm();            |
+*                    ^                           ^                                      |____________________________________|
 *                    |                           |                              
 *                    |                           |
 *            ________|___________________      ______|_____________________
