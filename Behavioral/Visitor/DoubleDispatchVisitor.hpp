@@ -5,6 +5,17 @@
 using namespace std;
 
 /*
+* Purpose:
+*    - Encapsulates an operation executed on an object of class hierarchy type
+*    - Enables to define new operations without changing the object hierarchy, but changes the interface,
+*      as a new Accept method is added to the class hierarchy
+*
+* Use Case:
+*    - Operations should be performed on an object hierarchy
+*    - The object hierarchy is stable, but the operations change frequently
+*    - The class' hierarchy newly added method Accept is used to inject dependency (*this) into Visitor hierarchy,
+*    used by the Visitor's encapsulated operation to access the class' interface
+*
 * Double dispatch visitor is the classical visitor implementation. It involves creating an interface for
 * the visitor, which declares visit methods that take input a ptr/ref to each type in the class hierarchy.
 * In order for this to work, the classes in the hierarchy must be forward declared. Then, an implementation
@@ -15,7 +26,37 @@ using namespace std;
 *   VisitorImpl.visit(Type3)->breaks down Type3 into Type2 and Type1 => call type2.accept() and type1.accept()
 *   then, these accept methods call visit on their own kind, where the control flow can reach the end with
 * a last call to visit which has nothing to accept
-*/
+*
+*    ________________________________________                            __________________________________________    
+*    |            VisitorInterface          |                            |                Base                    |        
+*    |                                      |            Uses            |                                        |
+*    |virtual void Visit(Base&) = 0;        |<---------------------------| void Accept(VisitorInterface& visitor) |
+*    |virtual void Visit(Derived&) = 0;     |                            |  {                                     |    
+*    |virtual void Visit(MostDerived&) = 0; |                            |     visitor.Visit(*this);}             |
+*    |______________________________________|                            |________________________________________|
+*                    ^                                                                      ^  
+*                    |                                                                      |  
+*                    | Inheritance                                                          | Inheritance         
+*                    |                                                                      |  
+*    ________________|_______________________________                     __________________|______________________   
+*    |            VisitorImpl                       |                     |                Derived                 |
+*    |                                              |                     |                                        |
+*    |virtual void Visit(Base& b) override          |                     | void Accept(VisitorInterface& visitor) |
+*    |{ b.GetValue(); }                             |                     |    {                                   |
+*    |virtual void Visit(Derived& d) override       |                     |        visitor.Visit(*this);}          |     
+*    |{   d.GetValue1();                            |                     |________________________________________|
+*    |    d.GetValue2(); }                          |                                       ^ 
+*    |virtual void Visit(MostDerived& md) override  |                                       | 
+*    |{   md.GetValue1();                           |                                       |  
+*    |    md.GetValue2();                           |                                       |   
+*    |    md.GetValue3(); }                         |                     __________________|______________________ 
+*    |______________________________________________|                     |            MostDerived                 | 
+*                                                                         |                                        |
+*                                                                         | void Accept(VisitorInterface& visitor) |
+*                                                                         |    {                                   |
+*                                                                         |        visitor.Visit(*this);}          |
+*                                                                         |________________________________________|
+*/                                                                        
 
 
 //Step 1: define interface for visitor and forward declare class hierarchy implementations
