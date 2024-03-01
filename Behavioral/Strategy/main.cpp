@@ -10,13 +10,13 @@
 * is an interface whith at least one implementation, which is used by another (business logic) class.
 *
 *            _____________________________________                          _____________________________________  
-*            |          StrategyInterface         |                         |            User class              |   
+*            |          StrategyInterface         |       Uses              |            User class              |   
 *            |                                    |<------------------------|                                    |    
 *            | virtual void CoreAlgorithm() = 0;  |                         | StrategyInterface& strategyAlgo;   |
 *            |____________________________________|                         |                                    |
 *                    ^                           ^                          | strategyAlgo.CoreAlgorithm();      |     
 *                    |                           |                          |____________________________________|   
-*                    |                           |
+*                    | Inheritance               | Inheritance
 *            ________|_______________      ______|________________
 *            |  Implementation 1    |      | Implementation 2     |
 *            |                      |      |                      |  
