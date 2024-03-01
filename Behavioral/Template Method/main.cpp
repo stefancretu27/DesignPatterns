@@ -10,14 +10,14 @@
 * are instantiated in order to be used for invoking the encapsulated behaviors.
 *
 *             _________________________________________________                         _____________________________________         
-*            |    TemplateMethodInterface                     |                         |            User class              |             
+*            |    TemplateMethodInterface                     |      Uses               |            User class              |             
 *            |                                                |<------------------------|                                    |
 *            | void GenericAlgorithm(){SpecificAlgorithm();}  |                         | TemplateMethodInterface& tmi;      |
 *            | virtual void SpecificAlgorithm() = 0;          |                         |                                    |
 *            |________________________________________________|                         | tmi.GenericAlgorithm();            |
-*                    ^                           ^                                      |____________________________________|
-*                    |                           |                              
-*                    |                           |
+*                    ^                               ^                                  |____________________________________|
+*                    |                               |                              
+*                    | Inheritance                   | Inheritance
 *            ________|___________________      ______|_____________________
 *            |  Implementation 1        |      | Implementation 2         |
 *            |                          |      |                          |  
